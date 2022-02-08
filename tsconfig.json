@@ -5,13 +5,8 @@
     "target": "es6",
     "outDir": "dist/",
     "jsx": "react",
-    "types": [
-        "react",
-        "node"
-    ],
-    "skipLibCheck": true,
+    "types": ["react", "node"],
+    "skipLibCheck": true
   },
-  "files": [
-      "src/tabContent.tsx"
-  ]
+  "files": ["src/tabContent.tsx"]
 }

@@ -7,25 +7,25 @@ const { load } = require('cheerio')
 
 function run () {
     let reportDir = tl.getPathInput('reportDir', true, true);
-  
+
     let files = globby.sync([reportDir.replace(/\\/g, '/')], {expandDirectories : {files: ['*'], extensions: ['html']}})
-  
+
     const fileProperties = []
-  
+
     files.forEach(file => {
       tl.debug(`Reading report ${file}`)
       const fileContent = readFileSync(file).toString()
       const document = load(fileContent)
       writeFileSync(file, document.html())
-  
+
       const attachmentProperties = {
         name: generateName(basename(file)),
         type: 'report-html'
       }
-  
+
       fileProperties.push(attachmentProperties)
       tl.command('task.addattachment', attachmentProperties, file)
-      
+
     })
 
     const jobName = dashify(tl.getVariable('Agent.JobName'))
@@ -42,7 +42,7 @@ function generateName (fileName) {
     const stageName = dashify(tl.getVariable('System.StageDisplayName'))
     const stageAttempt = tl.getVariable('System.StageAttempt')
     const tabName = tl.getInput('tabName', false ) || 'Html-Report'
-  
+
     return `${tabName}.${jobName}.${stageName}.${stageAttempt}.${fileName}`
   }
 
@@ -54,7 +54,7 @@ try {
     const tabName = tl.getInput('tabName', false ) || 'Html-Report'
     let path = resolve(reportDir)
     console.log(path)
-    tl.addAttachment('report-html', `${tabName}.${jobName}.${stageName}.${stageAttempt}`, path)  
+    tl.addAttachment('report-html', `${tabName}.${jobName}.${stageName}.${stageAttempt}`, path)
 } catch (error) {
     tl.setResult(tl.TaskResult.SucceededWithIssues, error.message);
 }
